@@ -62,7 +62,7 @@ def listar_todos_cursos():
 
 
 @app.get("/api/cursos/{id}")
-def obter_por_id_curos(id:int ):
+def obter_por_id_cursos(id:int ):
     for curso in alunos:
         if curso.id == id:
             return curso
@@ -110,7 +110,7 @@ def apagar_curso(id: int):
 
 @dataclass
 class Aluno:
-    id: str = field()
+    id: int = field()
     nome: str = field()
     sobrenome: str = field()
     cpf: str = field()

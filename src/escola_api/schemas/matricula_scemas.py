@@ -1,7 +1,7 @@
-from dataclasses import Field
+#from dataclasses import Field
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Matricula(BaseModel):
@@ -15,5 +15,5 @@ class MatriculaCadastro(MatriculaBase):
     pass
 
 
-class MatriculaCadastro(BaseModel):
+class MatriculaEditar(BaseModel):
     curso_id: int = Field()

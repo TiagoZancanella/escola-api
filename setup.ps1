@@ -3,7 +3,6 @@
 
 # Caminho do ambiente virtual
 $envDir = "env"
-
 # Verifica se Python está instalado
 if (!(Get-Command python -ErrorAction SilentlyContinue)) {
     Write-Host "Python não está instalado. Por favor, instale o Python primeiro." -ForegroundColor Red

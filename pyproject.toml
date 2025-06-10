@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "escola_api", from = "src"}]
+packages = [{include = "src.escola_api", from = "src"}]
 
 
 [build-system]

@@ -1,4 +1,5 @@
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Query
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from src.escola_api.app import router
@@ -8,16 +9,25 @@ from src.escola_api.schemas.aluno_schemas import Aluno, AlunoCadastro, AlunoEdit
 
 
 @router.get("/api/alunos", tags=["alunos"])
-def listar_todos_alunos(db: Session = Depends(get_db)):
-    alunos = db.query(AlunoEntidade).all()
-    alunos_responde = [Aluno(
+def listar_todos_alunos(filtro: str = Query(default="", alias="filtro"), db: Session = Depends(get_db)):
+    pesquisa = f"%{filtro}%"
+    alunos = db.query(AlunoEntidade).filter(
+        or_(
+            AlunoEntidade.nome.ilike(pesquisa),
+            AlunoEntidade.sobrenome.ilike(pesquisa),
+            # AlunoEntidade.cpf == filtro # buscar exatamente aquele cpf "210.202.131-22"
+            AlunoEntidade.cpf == f"{filtro}%" # buscar o cpf que começa com "210"
+            # AlunoEntidade.cpf.ilike(pesquisa) # busca em qualquer part do cpf
+        )
+    ).all()
+    alunos_response = [Aluno(
         id=aluno.id,
         nome=aluno.nome,
         sobrenome=aluno.sobrenome,
         cpf=aluno.cpf,
         data_nascimento=aluno.data_nascimento,
     ) for aluno in alunos]
-    return alunos_responde
+    return alunos_response
 
 
 @router.get("/api/alunos/{id}", tags=["alunos"])

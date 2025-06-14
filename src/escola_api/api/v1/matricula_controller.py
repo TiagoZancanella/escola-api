@@ -1,3 +1,4 @@
+from datetime import date
 from http.client import HTTPException
 
 from fastapi import Query
@@ -31,8 +32,8 @@ def listar_todas_matricula(id_curso: int = Query(alias="idCurso"), db: Session =
 def cadastrar_matricula(form:MatriculaCadastro,db: Session = Depends(get_db)):
     matricula = MatriculaEntidade(
         aluno_id=form.aluno_id,
-        curso_id=form.curso.id,
-        data_matricula=form.date.today()
+        curso_id=form.curso_id,
+        data_matricula=date.today()
     )
     db.add(matricula)
     db.commit()
@@ -43,7 +44,7 @@ def cadastrar_matricula(form:MatriculaCadastro,db: Session = Depends(get_db)):
 
 @router.delete("/api/matriculas/{id}", status_code=204, tags=["matriculas"])
 def apagar_matricula(id: int, db: Session = Depends(get_db)):
-    matricula = db.query(MatriculaEntidade.filter(MatriculaEntidade.id == id).first())
+    matricula = db.query(MatriculaEntidade).filter(MatriculaEntidade.id == id).first()
     if matricula:
         db.delete(matricula)
         db.commit()
